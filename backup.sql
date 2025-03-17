@@ -5,7 +5,7 @@
 -- Dumped from database version 17.2
 -- Dumped by pg_dump version 17.2
 
--- Started on 2025-03-17 16:45:41
+-- Started on 2025-03-17 17:06:03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -467,6 +467,7 @@ COPY public.master_service_category (service_category_id, category_name) FROM st
 3	Perusahaan (Mitra)
 4	Perusahaan (Guarantee Letter)
 5	Asuransi Admedika
+7	update lagi cuasday
 \.
 
 
@@ -534,7 +535,7 @@ COPY public.pricelists (pricelist_id, service_id, service_category_id, price) FR
 35	10	1	1000.00
 36	10	2	1500.00
 37	10	3	3000.00
-38	10	4	5000.00
+38	10	4	6000.00
 \.
 
 
@@ -665,7 +666,7 @@ SELECT pg_catalog.setval('public.master_doctor_doctor_id_seq', 9, true);
 -- Name: master_service_category_service_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.master_service_category_service_category_id_seq', 6, true);
+SELECT pg_catalog.setval('public.master_service_category_service_category_id_seq', 7, true);
 
 
 --
@@ -799,7 +800,7 @@ CREATE OR REPLACE VIEW public."vw.transactions" AS
   GROUP BY t.transaction_id, d.doctor_name_name, ms.service_group, t.patient_name, t.transaction_date, t.tax_rate;
 
 
--- Completed on 2025-03-17 16:45:41
+-- Completed on 2025-03-17 17:06:03
 
 --
 -- PostgreSQL database dump complete
