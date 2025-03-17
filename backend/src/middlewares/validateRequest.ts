@@ -8,8 +8,10 @@ export const validateRequest = (
 ): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return; 
+    res
+      .status(400)
+      .json({ message: "Request validation failed", errors: errors.array() });
+    return;
   }
   next();
 };
