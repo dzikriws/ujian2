@@ -23,6 +23,8 @@ export const getTransactions = async (
       end_date,
       min_grand_total,
       max_grand_total,
+      skip,
+      take
     } = req.query;
 
     let query = `SELECT * FROM public."vw.transactions" WHERE 1=1`;
@@ -70,6 +72,16 @@ export const getTransactions = async (
       queryParams.push(max_grand_total);
       paramIndex++;
     }
+    if (skip) {
+      query += ` OFFSET $${paramIndex}`;
+      queryParams.push(skip);
+      paramIndex++;
+    }
+    if (take) {
+      query += ` LIMIT $${paramIndex}`;
+      queryParams.push(take);
+      paramIndex++;
+    }
 
     const result = await client.query(query, queryParams);
 
@@ -102,7 +114,14 @@ export const getTransaction = async (
       `SELECT * FROM public."vw.transactions" WHERE transaction_id = $1`,
       [transaction_id]
     );
-    res.status(200).json(result.rows);
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ message: `Transaction with id ${transaction_id} not found` });
+      return;
+    }
+    res
+      .status(200)
+      .json({ message: "Success getting transaction", data: result.rows });
   } catch (error) {
     console.error("Error fetching transaction:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -182,8 +201,8 @@ export const createTransaction = async (
       const amount = price * detail.qty;
 
       // Parsing type
-      const parsedPrice = parseInt(price.toFixed(2));
-      const parsedAmount = parseInt(amount.toFixed(2));
+      const parsedPrice = parseFloat((Number(price) || 0).toFixed(2));
+      const parsedAmount = parseFloat((Number(amount) || 0).toFixed(2));
 
       const insertTransactionDetailQuery = `
           INSERT INTO transaction_details 

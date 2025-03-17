@@ -69,7 +69,7 @@
 --     pricelist_id SERIAL PRIMARY KEY,
 --     service_id INT,
 --     service_category_id INT,
---     price INT
+--     price NUMERIC(10,2)
 -- );
 
 -- INSERT INTO pricelists (pricelist_id, service_id, service_category_id, price) VALUES
@@ -105,8 +105,8 @@
 --     service_id INT,
 --     service_category INT,
 --     quantity INT,
---     price INT,
---     amount INT
+--     price NUMERIC(10,2),
+--     amount NUMERIC(10,2)
 -- );
 
 -- INSERT INTO transaction_details (transaction_id, service_id, service_category, quantity, price, amount) VALUES
