@@ -96,6 +96,11 @@ export const updateDoctor = async (
 
     const parsedDoctorId = parseInt(doctor_id);
 
+    if (isNaN(parsedDoctorId)) {
+      res.status(400).json({ message: "Invalid doctor id" });
+      return;
+    }
+
     client.query("BEGIN");
 
     const updateDoctorQuery = `

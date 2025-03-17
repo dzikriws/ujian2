@@ -137,6 +137,13 @@ export const updateService = async (
     const { service_id } = req.params;
     const { service_name, service_group, categories } = req.body;
 
+    const parsedServiceId = parseInt(service_id);
+
+    if (isNaN(parsedServiceId)) {
+      res.status(400).json({ message: "Invalid service_id" });
+      return;
+    }
+
     await client.query("BEGIN");
 
     // Checking service
@@ -144,7 +151,7 @@ export const updateService = async (
         SELECT service_id FROM master_service WHERE service_id = $1
       `;
     const checkServiceResult = await client.query(checkServiceQuery, [
-      service_id,
+      parsedServiceId,
     ]);
 
     if (checkServiceResult.rowCount === 0) {
@@ -162,7 +169,7 @@ export const updateService = async (
     await client.query(updateServiceQuery, [
       service_name,
       service_group,
-      service_id,
+      parsedServiceId,
     ]);
 
     // Take existing categories
@@ -171,7 +178,7 @@ export const updateService = async (
       `;
     const existingCategoriesResult = await client.query(
       existingCategoriesQuery,
-      [service_id]
+      [parsedServiceId]
     );
     const existingCategoryIds = existingCategoriesResult.rows.map(
       (row) => row.service_category_id
@@ -188,7 +195,7 @@ export const updateService = async (
           `;
         await client.query(updateCategoryQuery, [
           category.price,
-          service_id,
+          parsedServiceId,
           category.category_id,
         ]);
       } else {

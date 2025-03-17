@@ -104,6 +104,11 @@ export const updateServiceCategory = async (
 
     const parsedServiceId = parseInt(service_category_id);
 
+    if (isNaN(parsedServiceId)) {
+      res.status(400).json({ message: "Invalid service category id" });
+      return;
+    }
+
     client.query("BEGIN");
 
     const result = await client.query(
