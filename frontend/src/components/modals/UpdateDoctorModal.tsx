@@ -1,24 +1,37 @@
-import React, { useState } from "react";
-import InputField from "./InputField";
-import {categoryOptions, countryOptions} from "../option/doctor";
+import React, { useState, useEffect } from "react";
+import InputField from "../commons/InputField";
+import { categoryOptions, countryOptions } from "../../option/doctor";
 
-interface AddDoctorModalProps {
+interface UpdateDoctorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (doctor: {
+  onSubmit: (
+    doctor_id: number,
+    doctor: {
+      doctor_name: string;
+      address: string;
+      city: string;
+      country: string;
+      kategori: string;
+      contact_phone: string;
+    }
+  ) => void;
+  doctor?: {
+    doctor_id: number;
     doctor_name: string;
     address: string;
     city: string;
     country: string;
     kategori: string;
     contact_phone: string;
-  }) => void;
+  };
 }
 
-const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
+const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  doctor,
 }) => {
   const [doctorName, setDoctorName] = useState("");
   const [address, setAddress] = useState("");
@@ -26,6 +39,17 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   const [country, setCountry] = useState(countryOptions[0].label);
   const [kategori, setKategori] = useState(categoryOptions[0]);
   const [contactPhone, setContactPhone] = useState("");
+
+  useEffect(() => {
+    if (doctor) {
+      setDoctorName(doctor.doctor_name || "");
+      setAddress(doctor.address || "");
+      setCity(doctor.city || "");
+      setCountry(doctor.country || countryOptions[0].label);
+      setKategori(doctor.kategori || categoryOptions[0]);
+      setContactPhone(doctor.contact_phone?.replace(/\D/g, "") || "");
+    }
+  }, [doctor]);
 
   const selectedCountry = countryOptions.find((c) => c.label === country);
   const phonePrefix = selectedCountry ? selectedCountry.code : "";
@@ -37,20 +61,18 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
-      doctor_name: doctorName,
-      address,
-      city,
-      country,
-      kategori,
-      contact_phone: `${phonePrefix} ${contactPhone}`,
-    });
-    setDoctorName("");
-    setAddress("");
-    setCity("");
-    setCountry(countryOptions[0].label);
-    setKategori(categoryOptions[0]);
-    setContactPhone("");
+    if (!doctorName.trim()) return;
+
+    if (doctor) {
+      onSubmit(doctor.doctor_id, {
+        doctor_name: doctorName,
+        address,
+        city,
+        country,
+        kategori,
+        contact_phone: `${phonePrefix} ${contactPhone}`,
+      });
+    }
     onClose();
   };
 
@@ -59,7 +81,7 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-base-200 p-6 rounded shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4 text-white">Add Doctor</h2>
+        <h2 className="text-xl font-bold mb-4 text-white">Update Doctor</h2>
         <form onSubmit={handleSubmit}>
           <InputField
             label="Doctor Name"
@@ -89,7 +111,9 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
           <select
             className="input input-bordered w-full mb-2"
             value={country}
-            onChange={(e) => setCountry(e.target.value)}
+            onChange={(e: {
+              target: { value: React.SetStateAction<string> };
+            }) => setCountry(e.target.value)}
             required
           >
             {countryOptions.map((c) => (
@@ -135,7 +159,7 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
               Cancel
             </button>
             <button type="submit" className="btn btn-primary">
-              Add
+              Update
             </button>
           </div>
         </form>
@@ -144,4 +168,4 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   );
 };
 
-export default AddDoctorModal;
+export default UpdateDoctorModal;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import InputField from "./InputField";
-import { getServiceCategories } from "../services/categoryService";
+import InputField from "../commons/InputField";
+import { getServiceCategories } from "../../services/categoryService";
 import he from "he";
 
 interface AddServiceModalProps {

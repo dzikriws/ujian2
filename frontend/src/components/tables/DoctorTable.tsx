@@ -1,21 +1,26 @@
 import React, { useState } from "react";
-import Pagination from "./Pagination";
-import ItemsPerPageSelector from "./ItemsPerPageSelector";
+import Pagination from "../commons/Pagination";
+import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import he from "he";  
 
-interface ServiceCategory {
-  category_id: number;
-  category_name: string;
+interface Doctor {
+  doctor_id: number;
+  doctor_name: string;
+  address: string;
+  city: string;
+  country: string;
+  kategori: string;
+  contact_phone: string;
 }
 
-interface ServiceCategoryTableProps {
-  categories: ServiceCategory[];
-  onEdit: (category: ServiceCategory) => void;
+interface DoctorTableProps {
+  doctors: Doctor[];
+  onEdit: (doctor: Doctor) => void;
   onDelete: (id: number) => void;
 }
 
-const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
-  categories,
+const DoctorTable: React.FC<DoctorTableProps> = ({
+  doctors,
   onEdit,
   onDelete,
 }) => {
@@ -24,7 +29,7 @@ const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedCategories = categories.slice(startIndex, endIndex);
+  const displayedDoctors = doctors.slice(startIndex, endIndex);
 
   return (
     <div className="overflow-x-auto">
@@ -39,25 +44,35 @@ const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
         <thead>
           <tr>
             <th>ID</th>
-            <th>Category Name</th>
+            <th>Doctor Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Category</th>
+            <th>Contact Phone</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {displayedCategories.map((category) => (
-            <tr key={category.category_id}>
-              <td>{category.category_id}</td>
-              <td>{he.decode(category.category_name)}</td>
+          {displayedDoctors.map((doctor) => (
+            <tr key={doctor.doctor_id}>
+              <td>{doctor.doctor_id}</td>
+              <td>{he.decode(doctor.doctor_name)}</td>
+              <td>{he.decode(doctor.address)}</td>
+              <td>{he.decode(doctor.city)}</td>
+              <td>{he.decode(doctor.country)}</td>
+              <td>{he.decode(doctor.kategori)}</td>
+              <td>{doctor.contact_phone}</td>
               <td className="flex gap-2">
                 <button
                   className="btn btn-sm btn-warning"
-                  onClick={() => onEdit(category)}
+                  onClick={() => onEdit(doctor)}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-sm btn-danger"
-                  onClick={() => onDelete(category.category_id)}
+                  onClick={() => onDelete(doctor.doctor_id)}
                 >
                   Delete
                 </button>
@@ -68,7 +83,7 @@ const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
       </table>
 
       <Pagination
-        totalItems={categories.length}
+        totalItems={doctors.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
@@ -77,4 +92,4 @@ const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
   );
 };
 
-export default ServiceCategoryTable;
+export default DoctorTable;

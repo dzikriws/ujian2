@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Pagination from "./Pagination";
-import ItemsPerPageSelector from "./ItemsPerPageSelector";
+import Pagination from "../commons/Pagination";
+import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import he from "he";
 
 interface Category {

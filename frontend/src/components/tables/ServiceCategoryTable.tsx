@@ -1,26 +1,21 @@
 import React, { useState } from "react";
-import Pagination from "./Pagination";
-import ItemsPerPageSelector from "./ItemsPerPageSelector";
+import Pagination from "../commons/Pagination";
+import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import he from "he";  
 
-interface Doctor {
-  doctor_id: number;
-  doctor_name: string;
-  address: string;
-  city: string;
-  country: string;
-  kategori: string;
-  contact_phone: string;
+interface ServiceCategory {
+  category_id: number;
+  category_name: string;
 }
 
-interface DoctorTableProps {
-  doctors: Doctor[];
-  onEdit: (doctor: Doctor) => void;
+interface ServiceCategoryTableProps {
+  categories: ServiceCategory[];
+  onEdit: (category: ServiceCategory) => void;
   onDelete: (id: number) => void;
 }
 
-const DoctorTable: React.FC<DoctorTableProps> = ({
-  doctors,
+const ServiceCategoryTable: React.FC<ServiceCategoryTableProps> = ({
+  categories,
   onEdit,
   onDelete,
 }) => {
@@ -29,13 +24,13 @@ const DoctorTable: React.FC<DoctorTableProps> = ({
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedDoctors = doctors.slice(startIndex, endIndex);
+  const displayedCategories = categories.slice(startIndex, endIndex);
 
   return (
     <div className="overflow-x-auto">
       <ItemsPerPageSelector
         itemsPerPage={itemsPerPage}
-        onChange={(value) => {
+        onChange={(value: React.SetStateAction<number>) => {
           setItemsPerPage(value);
           setCurrentPage(1);
         }}
@@ -44,35 +39,25 @@ const DoctorTable: React.FC<DoctorTableProps> = ({
         <thead>
           <tr>
             <th>ID</th>
-            <th>Doctor Name</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Country</th>
-            <th>Category</th>
-            <th>Contact Phone</th>
+            <th>Category Name</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {displayedDoctors.map((doctor) => (
-            <tr key={doctor.doctor_id}>
-              <td>{doctor.doctor_id}</td>
-              <td>{he.decode(doctor.doctor_name)}</td>
-              <td>{he.decode(doctor.address)}</td>
-              <td>{he.decode(doctor.city)}</td>
-              <td>{he.decode(doctor.country)}</td>
-              <td>{he.decode(doctor.kategori)}</td>
-              <td>{doctor.contact_phone}</td>
+          {displayedCategories.map((category) => (
+            <tr key={category.category_id}>
+              <td>{category.category_id}</td>
+              <td>{he.decode(category.category_name)}</td>
               <td className="flex gap-2">
                 <button
                   className="btn btn-sm btn-warning"
-                  onClick={() => onEdit(doctor)}
+                  onClick={() => onEdit(category)}
                 >
                   Edit
                 </button>
                 <button
                   className="btn btn-sm btn-danger"
-                  onClick={() => onDelete(doctor.doctor_id)}
+                  onClick={() => onDelete(category.category_id)}
                 >
                   Delete
                 </button>
@@ -83,7 +68,7 @@ const DoctorTable: React.FC<DoctorTableProps> = ({
       </table>
 
       <Pagination
-        totalItems={doctors.length}
+        totalItems={categories.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
@@ -92,4 +77,4 @@ const DoctorTable: React.FC<DoctorTableProps> = ({
   );
 };
 
-export default DoctorTable;
+export default ServiceCategoryTable;

@@ -5,10 +5,10 @@ import {
   deleteDoctor,
   updateDoctor,
 } from "../services/doctorService";
-import DoctorTable from "../components/DoctorTable";
-import AddDoctorModal from "../components/AddDoctorModal";
-import UpdateDoctorModal from "../components/UpdateDoctorModal";
-import SearchBar from "../components/SearchBar";
+import DoctorTable from "../components/tables/DoctorTable";
+import AddDoctorModal from "../components/modals/AddDoctorModal";
+import UpdateDoctorModal from "../components/modals/UpdateDoctorModal";
+import SearchBar from "../components/commons/SearchBar";
 import { useSnackbar } from "notistack";
 
 interface Doctor {

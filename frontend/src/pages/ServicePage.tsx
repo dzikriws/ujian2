@@ -5,10 +5,10 @@ import {
   deleteService,
   updateService,
 } from "../services/serviceService";
-import ServiceTable from "../components/ServiceTable";
-import AddServiceModal from "../components/AddServiceModal";
-import UpdateServiceModal from "../components/UpdateServiceModal";
-import SearchBar from "../components/SearchBar";
+import ServiceTable from "../components/tables/ServiceTable";
+import AddServiceModal from "../components/modals/AddServiceModal";
+import UpdateServiceModal from "../components/modals/UpdateServiceModal";
+import SearchBar from "../components/commons/SearchBar";
 import { useSnackbar } from "notistack";
 
 interface ServiceCategory {

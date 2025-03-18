@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import InputField from "./InputField";
+import InputField from "../commons/InputField";
 
 interface UpdateServiceCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
-    category_id: number, // Menggunakan category_id
+    category_id: number,
     service_category: { category_name: string }
   ) => void;
-  serviceCategory?: { category_id: number; category_name: string }; // Pastikan di sini menggunakan category_id
+  serviceCategory?: { category_id: number; category_name: string }; 
 }
 
 const UpdateServiceCategoryModal: React.FC<UpdateServiceCategoryModalProps> = ({

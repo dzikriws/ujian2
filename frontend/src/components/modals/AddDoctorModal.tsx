@@ -1,37 +1,24 @@
-import React, { useState, useEffect } from "react";
-import InputField from "./InputField";
-import {categoryOptions, countryOptions} from "../option/doctor";
+import React, { useState } from "react";
+import InputField from "../commons/InputField";
+import {categoryOptions, countryOptions} from "../../option/doctor";
 
-interface UpdateDoctorModalProps {
+interface AddDoctorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (
-    doctor_id: number,
-    doctor: {
-      doctor_name: string;
-      address: string;
-      city: string;
-      country: string;
-      kategori: string;
-      contact_phone: string;
-    }
-  ) => void;
-  doctor?: {
-    doctor_id: number;
+  onSubmit: (doctor: {
     doctor_name: string;
     address: string;
     city: string;
     country: string;
     kategori: string;
     contact_phone: string;
-  };
+  }) => void;
 }
 
-const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
+const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  doctor,
 }) => {
   const [doctorName, setDoctorName] = useState("");
   const [address, setAddress] = useState("");
@@ -39,17 +26,6 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
   const [country, setCountry] = useState(countryOptions[0].label);
   const [kategori, setKategori] = useState(categoryOptions[0]);
   const [contactPhone, setContactPhone] = useState("");
-
-  useEffect(() => {
-    if (doctor) {
-      setDoctorName(doctor.doctor_name || "");
-      setAddress(doctor.address || "");
-      setCity(doctor.city || "");
-      setCountry(doctor.country || countryOptions[0].label);
-      setKategori(doctor.kategori || categoryOptions[0]);
-      setContactPhone(doctor.contact_phone?.replace(/\D/g, "") || "");
-    }
-  }, [doctor]);
 
   const selectedCountry = countryOptions.find((c) => c.label === country);
   const phonePrefix = selectedCountry ? selectedCountry.code : "";
@@ -61,18 +37,20 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!doctorName.trim()) return;
-
-    if (doctor) {
-      onSubmit(doctor.doctor_id, {
-        doctor_name: doctorName,
-        address,
-        city,
-        country,
-        kategori,
-        contact_phone: `${phonePrefix} ${contactPhone}`,
-      });
-    }
+    onSubmit({
+      doctor_name: doctorName,
+      address,
+      city,
+      country,
+      kategori,
+      contact_phone: `${phonePrefix} ${contactPhone}`,
+    });
+    setDoctorName("");
+    setAddress("");
+    setCity("");
+    setCountry(countryOptions[0].label);
+    setKategori(categoryOptions[0]);
+    setContactPhone("");
     onClose();
   };
 
@@ -81,7 +59,7 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-base-200 p-6 rounded shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4 text-white">Update Doctor</h2>
+        <h2 className="text-xl font-bold mb-4 text-white">Add Doctor</h2>
         <form onSubmit={handleSubmit}>
           <InputField
             label="Doctor Name"
@@ -157,7 +135,7 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
               Cancel
             </button>
             <button type="submit" className="btn btn-primary">
-              Update
+              Add
             </button>
           </div>
         </form>
@@ -166,4 +144,4 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = ({
   );
 };
 
-export default UpdateDoctorModal;
+export default AddDoctorModal;
