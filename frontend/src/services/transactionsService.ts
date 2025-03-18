@@ -2,6 +2,7 @@ import { api } from "../utils/api";
 
 export const getTransactions = async () => {
   const response = await api.get("/transactions");
+  console.log(response.data.data);
   return response.data.data;
 };
 

@@ -6,9 +6,9 @@ import he from "he";
 interface Transaction {
   transaction_id: number;
   doctor_name: string;
-  patient_name: number;
+  patient_name: string;
   service_group: string;
-  date: Date;
+  date: string;
   tax_rate: number | null;
   username: string;
   details: {
