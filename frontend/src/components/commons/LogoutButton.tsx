@@ -6,9 +6,9 @@ const LogoutButton = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
-      localStorage.removeItem("is_login");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
+      sessionStorage.removeItem("is_login");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("role");
       navigate("/");
     }
   };

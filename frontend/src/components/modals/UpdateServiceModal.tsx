@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../commons/InputField";
+import { getServiceCategories } from "../../services/categoryService";
+import he from "he";
 
 interface Category {
   category_id: number;
@@ -35,6 +37,17 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
   const [serviceName, setServiceName] = useState("");
   const [serviceGroup, setServiceGroup] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<Category[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await getServiceCategories();
+      setAvailableCategories(data);
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (service) {
@@ -52,10 +65,22 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
     );
   };
 
+  const handleAddCategory = () => {
+    const available = availableCategories.filter(
+      (cat) => !categories.some((c) => c.category_id === cat.category_id)
+    );
+    if (available.length > 0) {
+      setCategories([...categories, { ...available[0], price: 0 }]);
+    }
+  };
+
+  const handleRemoveCategory = (id: number) => {
+    setCategories(categories.filter((cat) => cat.category_id !== id));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!service) return;
-
     onSubmit(service.service_id, {
       service_name: serviceName,
       service_group: serviceGroup,
@@ -85,12 +110,19 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
             onChange={(e) => setServiceGroup(e.target.value)}
             required
           />
-
-          <div className="mb-2">
+          <div className="mb-4">
             <h3 className="text-white mb-2">Categories</h3>
             {categories.map((category) => (
-              <div key={category.category_id} className="mb-2">
-                <label className="text-white">{category.category_name}</label>
+              <div
+                key={category.category_id}
+                className="flex items-center mb-2"
+              >
+                <select
+                  className="select select-bordered mr-2"
+                  value={category.category_id}
+                >
+                  <option>{he.decode(category.category_name)}</option>
+                </select>
                 <InputField
                   label="Price"
                   name="price"
@@ -104,22 +136,23 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
                   }
                   required
                 />
-                {/* <input
-                  type="number"
-                  value={category.price}
-                  onChange={(e) =>
-                    handleCategoryChange(
-                      category.category_id,
-                      Number(e.target.value)
-                    )
-                  }
-                  className="input input-bordered w-full"
-                  required
-                /> */}
+                <button
+                  type="button"
+                  className="btn btn-error ml-2"
+                  onClick={() => handleRemoveCategory(category.category_id)}
+                >
+                  ✕
+                </button>
               </div>
             ))}
+            <button
+              type="button"
+              className="btn btn-secondary mt-2"
+              onClick={handleAddCategory}
+            >
+              + Add Category
+            </button>
           </div>
-
           <div className="flex justify-end gap-2">
             <button type="button" className="btn" onClick={onClose}>
               Cancel
