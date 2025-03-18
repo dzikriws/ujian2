@@ -29,7 +29,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedTransactions = transactions.slice(startIndex, endIndex); // ✅ Pastikan ada slicing
+  const displayedTransactions = transactions.slice(startIndex, endIndex);
+
+  const formattedRupiah = (value: number) => {
+    return `${value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -61,7 +65,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                 <td>{transaction.patient_name}</td>
                 <td>{transaction.service_group}</td>
                 <td>{transaction.tax_rate}</td>
-                <td>{transaction.grand_total}</td>
+                <td>Rp. {formattedRupiah(Number(transaction.grand_total))}</td>
               </tr>
             ))
           ) : (
