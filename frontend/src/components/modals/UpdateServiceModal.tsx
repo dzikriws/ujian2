@@ -91,7 +91,20 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
             {categories.map((category) => (
               <div key={category.category_id} className="mb-2">
                 <label className="text-white">{category.category_name}</label>
-                <input
+                <InputField
+                  label="Price"
+                  name="price"
+                  type="number"
+                  value={category.price}
+                  onChange={(e) =>
+                    handleCategoryChange(
+                      category.category_id,
+                      Number(e.target.value)
+                    )
+                  }
+                  required
+                />
+                {/* <input
                   type="number"
                   value={category.price}
                   onChange={(e) =>
@@ -102,7 +115,7 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
                   }
                   className="input input-bordered w-full"
                   required
-                />
+                /> */}
               </div>
             ))}
           </div>

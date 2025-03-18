@@ -61,13 +61,11 @@ const ServicePage: React.FC = () => {
       }
       enqueueSnackbar(response.message, { variant: "success" });
     } catch (error: any) {
-      // enqueueSnackbar(
-      //   error.response?.data || "Failed to add service",
-      //   { variant: "error" }
-      // );
+      enqueueSnackbar(
+        error.response?.data || "Failed to add service",
+        { variant: "error" }
+      );
       console.error("Error adding service:", error);
-
-
     }
   };
 
@@ -113,7 +111,8 @@ const ServicePage: React.FC = () => {
   const handleSearch = (query: string) => {
     const lowerCaseQuery = query.toLowerCase();
     const filtered = services.filter((service) =>
-      service.service_name.toLowerCase().includes(lowerCaseQuery)
+      service.service_name.toLowerCase().includes(lowerCaseQuery) ||
+      service.service_group.toLowerCase().includes(lowerCaseQuery)
     );
     setFilteredServices(filtered);
   };

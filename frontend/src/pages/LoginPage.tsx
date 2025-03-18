@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [useEmail, setUseEmail] = useState(true); // State toggle
+  const [identifier, setIdentifier] = useState(""); // Bisa username atau email
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,10 +17,11 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        username,
-        password,
-      });
+      const payload = useEmail
+        ? { email: identifier, password }
+        : { username: identifier, password };
+
+      const response = await axios.post("http://localhost:3000/login", payload);
 
       if (response.status === 200) {
         enqueueSnackbar(response.data.message, { variant: "success" });
@@ -29,13 +31,10 @@ const LoginPage: React.FC = () => {
         sessionStorage.setItem("is_login", "true");
       }
     } catch (err: any) {
-      if (err.response && err.response.data && err.response.data.message) {
-        enqueueSnackbar(err.response.data.message, { variant: "error" });
-      } else {
-        enqueueSnackbar("Terjadi kesalahan. Coba lagi nanti.", {
-          variant: "error",
-        }); 
-      }
+      enqueueSnackbar(
+        err.response?.data?.message || "Terjadi kesalahan. Coba lagi nanti.",
+        { variant: "error" }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -48,15 +47,39 @@ const LoginPage: React.FC = () => {
           <div className="card-body">
             <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
 
+            {/* Toggle Login Method */}
+            <div className="flex justify-center mb-4">
+              <button
+                className={`btn ${
+                  useEmail ? "btn-neutral" : "btn-outline"
+                } mx-1`}
+                onClick={() => setUseEmail(true)}
+              >
+                Login dengan Email
+              </button>
+              <button
+                className={`btn ${
+                  !useEmail ? "btn-neutral" : "btn-outline"
+                } mx-1`}
+                onClick={() => setUseEmail(false)}
+              >
+                Login dengan Username
+              </button>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="fieldset-label">Username</label>
+                <label className="fieldset-label">
+                  {useEmail ? "Email" : "Username"}
+                </label>
                 <input
-                  type="text"
+                  type={useEmail ? "email" : "text"}
                   className="input w-full"
-                  placeholder="Masukkan username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder={
+                    useEmail ? "Email" : "Username"
+                  }
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   required
                 />
               </div>
@@ -66,15 +89,11 @@ const LoginPage: React.FC = () => {
                 <input
                   type="password"
                   className="input w-full"
-                  placeholder="Masukkan password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-              </div>
-
-              <div className="flex justify-between items-center">
-                <a className="link link-hover text-sm">Forgot password?</a>
               </div>
 
               <button

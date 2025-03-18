@@ -32,15 +32,8 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     const fetchCategories = async () => {
       const data = await getServiceCategories();
       setCategories(data);
-
-          // setLoading(true);
-          // const data = await getServiceCategories();
-          // setCategories(data);
-      console.log("Categories:", categories);
     };
     fetchCategories();
-    console.log("Categories after fetch:", categories);
-
   }, []);
 
   const handleCategoryChange = (categoryId: number, price: number) => {
@@ -60,10 +53,6 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
       setError("At least one category must have a price.");
       return;
     }
-
-    console.log("Selected Categories:", selectedCategories);
-    console.log("Service Name:", serviceName);
-    console.log("Service Group:", serviceGroup);
     setError("");
     onSubmit({
       service_name: serviceName,
@@ -104,7 +93,9 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                 key={category.category_id}
                 className="flex justify-between items-center mb-2"
               >
-                <span className="text-white">{he.decode(category.category_name)}</span>
+                <span className="text-white">
+                  {he.decode(category.category_name)}
+                </span>
                 <input
                   type="number"
                   className="input input-bordered w-24"

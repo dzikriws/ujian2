@@ -10,6 +10,8 @@ import AddDoctorModal from "../components/modals/AddDoctorModal";
 import UpdateDoctorModal from "../components/modals/UpdateDoctorModal";
 import SearchBar from "../components/commons/SearchBar";
 import { useSnackbar } from "notistack";
+import { categoryOptions, countryOptions } from "../option/doctor";
+import FilterDropdown from "../components/commons/FilterDropdown";
 
 interface Doctor {
   doctor_id: number;
@@ -28,6 +30,8 @@ const DoctorPage: React.FC = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -35,15 +39,35 @@ const DoctorPage: React.FC = () => {
     fetchDoctors();
   }, []);
 
+  console.log(doctors);
+
   useEffect(() => {
-    setFilteredDoctors(doctors);
-  }, [doctors]);
+    handleFilterChange();
+  }, [doctors, selectedCategory, selectedCountry]);
 
   const fetchDoctors = async () => {
     setLoading(true);
     const data = await getDoctors();
     setDoctors(data);
     setLoading(false);
+  };
+
+  const handleFilterChange = () => {
+    let filtered = doctors;
+
+    if (selectedCategory) {
+      filtered = filtered.filter(
+        (doctor) => doctor.kategori === selectedCategory
+      );
+    }
+
+    if (selectedCountry) {
+      filtered = filtered.filter(
+        (doctor) => doctor.country === selectedCountry
+      );
+    }
+
+    setFilteredDoctors(filtered);
   };
 
   const handleAddDoctor = async (newDoctor: Omit<Doctor, "doctor_id">) => {
@@ -112,6 +136,27 @@ const DoctorPage: React.FC = () => {
         </button>
       </div>
 
+      <div className="flex gap-4 mb-4">
+        <FilterDropdown
+          label="Categories"
+          value={selectedCategory}
+          options={categoryOptions.map((category) => ({
+            label: category,
+            value: category,
+          }))}
+          onChange={setSelectedCategory}
+        />
+
+        <FilterDropdown
+          label="Countries"
+          value={selectedCountry}
+          options={countryOptions.map((country) => ({
+            label: country.label,
+            value: country.label,
+          }))}
+          onChange={setSelectedCountry}
+        />
+      </div>
       <SearchBar onSearch={handleSearch} placeholder="Search Doctors..." />
 
       {loading ? (

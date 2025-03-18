@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Pagination from "../commons/Pagination";
 import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import he from "he";
+import CategoryPriceModal from "../modals/CategoryPriceModal";
 
 interface Category {
   category_id: number;
@@ -29,6 +30,10 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [selectedCategories, setSelectedCategories] = useState<
+    Category[] | null
+  >(null);
+  const [selectedServiceName, setSelectedServiceName] = useState<string>("");
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -49,27 +54,27 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
             <th>ID</th>
             <th>Service Name</th>
             <th>Service Group</th>
-            <th>Categories</th>
+            <th>Total Prices</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {displayedServices.map((service, index) => (
+          {displayedServices.map((service) => (
             <tr key={service.service_id}>
               <td>{service.service_id}</td>
               <td>{he.decode(service.service_name)}</td>
               <td>{he.decode(service.service_group)}</td>
-              <td>
-                <ul key={index}>
-                  {service.categories.map((category) => (
-                    <li key={category.category_id}>
-                      {he.decode(category.category_name)}: Rp.{" "}
-                      {category.price.toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-              </td>
+              <td>{service.categories.length}</td>
               <td className="flex gap-2">
+              <button
+                  className="btn btn-sm btn-info"
+                  onClick={() => {
+                    setSelectedCategories(service.categories);
+                    setSelectedServiceName(he.decode(service.service_name));
+                  }}
+                >
+                  View Prices
+                </button>
                 <button
                   className="btn btn-sm btn-warning"
                   onClick={() => onEdit(service)}
@@ -93,6 +98,14 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
+
+      {selectedCategories && (
+        <CategoryPriceModal
+          categories={selectedCategories}
+          onClose={() => setSelectedCategories(null)}
+          serviceName={selectedServiceName}
+        />
+      )}
     </div>
   );
 };
