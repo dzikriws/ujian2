@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="text-xl">Pharmacy Management</a>
+        <a className="text-xl">Clinic Service Management</a>
       </div>
       <div className="navbar-end">
             <LogoutButton />

@@ -208,7 +208,7 @@ export const updateService = async (
             VALUES ($1, $2, $3)
           `;
         await client.query(insertCategoryQuery, [
-          service_id,
+          parsedServiceId,
           category.category_id,
           category.price,
         ]);
