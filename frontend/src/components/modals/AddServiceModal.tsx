@@ -36,21 +36,43 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (categoryId: number, price: number) => {
+  const handleAddCategory = () => {
+    setSelectedCategories((prev) => [...prev, { category_id: 0, price: 0 }]);
+  };
+
+  const handleCategoryChange = (index: number, categoryId: number) => {
     setSelectedCategories((prev) => {
-      const existingIndex = prev.findIndex((c) => c.category_id === categoryId);
-      if (existingIndex !== -1) {
-        prev[existingIndex].price = price;
-        return [...prev];
+      if (prev.some((c, i) => c.category_id === categoryId && i !== index)) {
+        return prev;
       }
-      return [...prev, { category_id: categoryId, price }];
+      const updated = [...prev];
+      updated[index].category_id = categoryId;
+      return updated;
     });
+  };
+
+  const handlePriceChange = (index: number, price: number) => {
+    setSelectedCategories((prev) => {
+      const updated = [...prev];
+      updated[index].price = price;
+      return updated;
+    });
+  };
+
+  const handleRemoveCategory = (index: number) => {
+    setSelectedCategories((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategories.length === 0) {
-      setError("At least one category must have a price.");
+      setError("At least one category must be selected with a price.");
+      return;
+    }
+    if (selectedCategories.some((c) => c.category_id === 0 || c.price <= 0)) {
+      setError(
+        "All selected categories must have a valid selection and price."
+      );
       return;
     }
     setError("");
@@ -88,28 +110,64 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
           />
           <div className="mt-4">
             <label className="block text-white mb-2">Categories & Prices</label>
-            {categories.map((category) => (
+            {selectedCategories.map((selected, index) => (
               <div
-                key={category.category_id}
+                key={index}
                 className="flex justify-between items-center mb-2"
               >
-                <span className="text-white">
-                  {he.decode(category.category_name)}
-                </span>
+                <select
+                  className="select select-bordered w-40"
+                  value={selected.category_id}
+                  onChange={(e) =>
+                    handleCategoryChange(index, Number(e.target.value))
+                  }
+                >
+                  <option value={0} disabled>
+                    Select Category
+                  </option>
+                  {categories
+                    .filter(
+                      (c) =>
+                        !selectedCategories.some(
+                          (s, i) =>
+                            s.category_id === c.category_id && i !== index
+                        )
+                    )
+                    .map((category) => (
+                      <option
+                        key={category.category_id}
+                        value={category.category_id}
+                      >
+                        {he.decode(category.category_name)}
+                      </option>
+                    ))}
+                </select>
                 <input
                   type="number"
                   className="input input-bordered w-24"
                   placeholder="Price"
-                  min="0"
+                  min="1"
+                  value={selected.price}
                   onChange={(e) =>
-                    handleCategoryChange(
-                      category.category_id,
-                      Number(e.target.value)
-                    )
+                    handlePriceChange(index, Number(e.target.value))
                   }
                 />
+                <button
+                  type="button"
+                  className="btn btn-error btn-sm"
+                  onClick={() => handleRemoveCategory(index)}
+                >
+                  X
+                </button>
               </div>
             ))}
+            <button
+              type="button"
+              className="btn btn-secondary mt-2"
+              onClick={handleAddCategory}
+            >
+              + Add Category
+            </button>
           </div>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           <div className="flex justify-end gap-2 mt-4">
