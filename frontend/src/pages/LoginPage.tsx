@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [useEmail, setUseEmail] = useState(true); // State toggle
-  const [identifier, setIdentifier] = useState(""); // Bisa username atau email
+  const [useEmail, setUseEmail] = useState(true);
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

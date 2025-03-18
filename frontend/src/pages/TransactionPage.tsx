@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  getTransactions,
-  //  createTransaction
-} from "../services/transactionsService";
+import { getTransactions } from "../services/transactionsService";
 import TransactionTable from "../components/tables/TransactionTable";
 import SearchBar from "../components/commons/SearchBar";
-// import { useSnackbar } from "notistack";
 
 interface Transaction {
   transaction_id: number;
@@ -15,6 +11,7 @@ interface Transaction {
   date: string;
   tax_rate: number | null;
   username: string;
+  grand_total: number;
   details: {
     category_id: number;
     qty: number;
@@ -23,16 +20,10 @@ interface Transaction {
 
 const TransactionPage: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>(
-    []
-  );
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
   const [loading, setLoading] = useState(true);
-  // const [isAddModalOpen, setAddModalOpen] = useState(false);
-  // const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  // const [selectedCategory, setSelectedCategory] =
-  //   useState<Transaction | null>(null);
-
-  // const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchTransactions();
@@ -40,63 +31,21 @@ const TransactionPage: React.FC = () => {
 
   useEffect(() => {
     setFilteredTransactions(transactions);
-  }, [setTransactions]);
+  }, [transactions]);
 
   const fetchTransactions = async () => {
     setLoading(true);
     const data = await getTransactions();
     setTransactions(data);
-    console.log('oi', data);
     setLoading(false);
   };
 
-  // const handleAddCategory = async (newCategory: { category_name: string }) => {
-  //   try {
-  //     const response = await addServiceCategory(newCategory);
-  //     fetchCategories();
-  //     enqueueSnackbar(response.message, { variant: "success" });
-  //   } catch (error: any) {
-  //     const errorMessage =
-  //       error.response?.data?.message || "Failed to add category";
-  //     enqueueSnackbar(errorMessage, { variant: "error" });
-  //   }
-  // };
-
-  // const handleEditCategory = (category: ServiceCategory) => {
-  //   setSelectedCategory(category);
-  //   setUpdateModalOpen(true);
-  // };
-
-  // const handleUpdateCategory = async (
-  //   id: number,
-  //   updatedCategory: { category_name: string }
-  // ) => {
-  //   try {
-  //     const response = await updateServiceCategory(id, updatedCategory);
-  //     fetchCategories();
-  //     enqueueSnackbar(response.message, { variant: "success" });
-  //   } catch (error: any) {
-  //     const errorMessage =
-  //       error.response?.data?.message || "Failed to update category";
-  //     enqueueSnackbar(errorMessage, { variant: "error" });
-  //   }
-  // };
-
-  // const handleDeleteCategory = async (id: number) => {
-  //   if (window.confirm("Are you sure you want to delete this category?")) {
-  //     try {
-  //       await deleteServiceCategory(id);
-  //       fetchCategories();
-  //       enqueueSnackbar("Category deleted successfully!", {
-  //         variant: "success",
-  //       });
-  //     } catch (error) {
-  //       enqueueSnackbar("Failed to delete category", { variant: "error" });
-  //     }
-  //   }
-  // };
-
   const handleSearch = (query: string) => {
+    if (!query) {
+      setFilteredTransactions(transactions);
+      return;
+    }
+
     const lowerCaseQuery = query.toLowerCase();
     const filtered = transactions.filter(
       (transaction) =>
@@ -110,12 +59,7 @@ const TransactionPage: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Transactions</h1>
-        <button
-          className="btn btn-primary"
-          // onClick={() => setAddModalOpen(true)}
-        >
-          + Add Transaction
-        </button>
+        <button className="btn btn-primary">+ Add Transaction</button>
       </div>
 
       <SearchBar onSearch={handleSearch} placeholder="Search Transactions..." />
@@ -125,19 +69,6 @@ const TransactionPage: React.FC = () => {
       ) : (
         <TransactionTable transactions={filteredTransactions} />
       )}
-
-      {/* <AddServiceCategoryModal
-        isOpen={isAddModalOpen}
-        onClose={() => setAddModalOpen(false)}
-        onSubmit={handleAddCategory}
-      />
-
-      <UpdateServiceCategoryModal
-        isOpen={isUpdateModalOpen}
-        onClose={() => setUpdateModalOpen(false)}
-        onSubmit={handleUpdateCategory}
-        serviceCategory={selectedCategory || undefined}
-      /> */}
     </div>
   );
 };
