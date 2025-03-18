@@ -93,7 +93,7 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg w-96">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4 text-white">Update Service</h2>
         <form onSubmit={handleSubmit}>
           <InputField
@@ -120,6 +120,7 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
                 <select
                   className="select select-bordered mr-2"
                   value={category.category_id}
+                  required
                 >
                   <option>{he.decode(category.category_name)}</option>
                 </select>

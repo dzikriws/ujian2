@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputField from "../commons/InputField";
-import {categoryOptions, countryOptions} from "../../option/doctor";
+import { categoryOptions, countryOptions } from "../../option/doctor";
 
 interface AddDoctorModalProps {
   isOpen: boolean;
@@ -58,7 +58,7 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg w-96">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4 text-white">Add Doctor</h2>
         <form onSubmit={handleSubmit}>
           <InputField

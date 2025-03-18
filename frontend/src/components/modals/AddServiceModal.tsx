@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import InputField from "../commons/InputField";
 import { getServiceCategories } from "../../services/categoryService";
 import he from "he";
+import { useSnackbar } from "notistack";
 
 interface AddServiceModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     { category_id: number; price: number }[]
   >([]);
   const [error, setError] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -66,13 +68,11 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategories.length === 0) {
-      setError("At least one category must be selected with a price.");
+      enqueueSnackbar("Please select at least one category.", { variant: "error" });
       return;
     }
     if (selectedCategories.some((c) => c.category_id === 0 || c.price <= 0)) {
-      setError(
-        "All selected categories must have a valid selection and price."
-      );
+      enqueueSnackbar("Please enter valid prices for all categories.", { variant: "error" });
       return;
     }
     setError("");
@@ -91,7 +91,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg w-96">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4 text-white">Add Service</h2>
         <form onSubmit={handleSubmit}>
           <InputField
@@ -116,7 +116,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                 className="flex justify-between items-center mb-2"
               >
                 <select
-                  className="select select-bordered w-40"
+                  className="select select-bordered w-1/2 mr-1"
                   value={selected.category_id}
                   onChange={(e) =>
                     handleCategoryChange(index, Number(e.target.value))
@@ -144,13 +144,14 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                 </select>
                 <input
                   type="number"
-                  className="input input-bordered w-24"
+                  className="input input-bordered w-1/2 ml-1 mr-1"
                   placeholder="Price"
                   min="1"
                   value={selected.price}
                   onChange={(e) =>
                     handlePriceChange(index, Number(e.target.value))
                   }
+                  required
                 />
                 <button
                   type="button"

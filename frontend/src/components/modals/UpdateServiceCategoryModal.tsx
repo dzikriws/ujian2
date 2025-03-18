@@ -8,7 +8,7 @@ interface UpdateServiceCategoryModalProps {
     category_id: number,
     service_category: { category_name: string }
   ) => void;
-  serviceCategory?: { category_id: number; category_name: string }; 
+  serviceCategory?: { category_id: number; category_name: string };
 }
 
 const UpdateServiceCategoryModal: React.FC<UpdateServiceCategoryModalProps> = ({
@@ -45,7 +45,7 @@ const UpdateServiceCategoryModal: React.FC<UpdateServiceCategoryModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg w-96">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4 text-white">
           Update Service Category
         </h2>
