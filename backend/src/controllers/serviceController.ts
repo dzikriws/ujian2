@@ -9,7 +9,10 @@ export const getServices = async (
   try {
     client = await pool.connect();
     const result = await client.query(`SELECT * FROM public."vw.service"`);
-    res.status(200).json(result.rows);
+    res.status(200).json({
+      message: "Success getting services",
+      data: result.rows,
+    });
   } catch (error) {
     console.error("Error fetching services:", error);
     res.status(500).json({ message: "Internal server error" });

@@ -8,14 +8,12 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
 
     try {
       const response = await axios.post("http://localhost:3000/login", {
@@ -24,18 +22,20 @@ const LoginPage: React.FC = () => {
       });
 
       if (response.status === 200) {
-        enqueueSnackbar("Login berhasil!", {
-          variant: "success",
-        });
+        enqueueSnackbar(response.data.message, { variant: "success" });
         navigate("/dashboard");
+        sessionStorage.setItem("username", response.data.data.username);
+        sessionStorage.setItem("role", response.data.data.role);
+        sessionStorage.setItem("is_login", "true");
       }
-    } catch (err) {
-      if (err instanceof Error) {
-       enqueueSnackbar(err.message, {
-        variant: "error",
-       })  
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
+      } else {
+        enqueueSnackbar("Terjadi kesalahan. Coba lagi nanti.", {
+          variant: "error",
+        }); 
       }
-      setError("Login gagal! Periksa kembali username dan password.");
     } finally {
       setIsLoading(false);
     }
@@ -47,9 +47,6 @@ const LoginPage: React.FC = () => {
         <div className="card bg-base-100 w-full max-w-lg shadow-2xl p-8">
           <div className="card-body">
             <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
-            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

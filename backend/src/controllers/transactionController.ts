@@ -24,7 +24,7 @@ export const getTransactions = async (
       min_grand_total,
       max_grand_total,
       skip,
-      take
+      take,
     } = req.query;
 
     let query = `SELECT * FROM public."vw.transactions" WHERE 1=1`;
@@ -85,7 +85,10 @@ export const getTransactions = async (
 
     const result = await client.query(query, queryParams);
 
-    res.status(200).json(result.rows);
+    res.status(200).json({
+      message: "Success getting transactions",
+      data: result.rows,
+    });
   } catch (error) {
     console.error("Error fetching transactions:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -116,7 +119,9 @@ export const getTransaction = async (
     );
 
     if (result.rows.length === 0) {
-      res.status(404).json({ message: `Transaction with id ${transaction_id} not found` });
+      res
+        .status(404)
+        .json({ message: `Transaction with id ${transaction_id} not found` });
       return;
     }
     res

@@ -9,9 +9,14 @@ export const getServiceCategory = async (
   try {
     client = await pool.connect();
     const result = await client.query(`SELECT * FROM master_service_category`);
+
+    const formattedResult = result.rows.map((item) => ({
+      category_id: item.service_category_id,
+      category_name: item.category_name,
+    }))
     res
       .status(200)
-      .json({ message: "Success getting service category", data: result.rows });
+      .json({ message: "Success getting service category", data: formattedResult });
   } catch (error) {
     console.error("Error fetching services:", error);
     res.status(500).json({ message: "Internal server error" });

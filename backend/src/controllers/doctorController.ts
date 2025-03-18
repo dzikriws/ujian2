@@ -9,7 +9,18 @@ export const getDoctors = async (
   try {
     client = await pool.connect();
     const result = await client.query("SELECT * FROM master_doctor");
-    res.status(200).json(result.rows);
+
+    const formattedDoctors = result.rows.map(
+      ({ doctor_name_name, ...rest }) => ({
+        ...rest,
+        doctor_name: doctor_name_name,
+      })
+    );
+
+    res.status(200).json({
+      message: "Success getting doctors",
+      data: formattedDoctors,
+    });
   } catch (error) {
     console.error("Error fetching doctors:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -58,12 +69,10 @@ export const createDoctor = async (
 
     await client.query("COMMIT");
 
-    res
-      .status(201)
-      .json({
-        message: `Doctor ${doctorName} created successfully`,
-        data: result.rows[0],
-      });
+    res.status(201).json({
+      message: `Doctor ${doctorName} created successfully`,
+      data: result.rows[0],
+    });
   } catch (error) {
     if (client) {
       await client.query("ROLLBACK");
