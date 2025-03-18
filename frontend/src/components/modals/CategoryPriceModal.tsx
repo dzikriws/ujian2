@@ -11,18 +11,20 @@ interface CategoryPriceModalProps {
   categories: Category[];
   onClose: () => void;
   serviceName: string;
+  serviceGroup: string;
 }
 
 const CategoryPriceModal: React.FC<CategoryPriceModalProps> = ({
   categories,
   onClose,
-  serviceName
+  serviceName,
+  serviceGroup
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-base-100 p-5 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-semibold mb-3">Category Prices</h2>
         <h3 className="text-lg font-semibold mb-2">{serviceName}</h3>
+        <h3 className="text-lg font-semibold mb-2">{serviceGroup}</h3>
         <ul className="space-y-2">
           {categories.map((category) => (
             <li key={category.category_id} className="flex justify-between border-b pb-1">

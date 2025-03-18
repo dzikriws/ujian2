@@ -34,6 +34,7 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
     Category[] | null
   >(null);
   const [selectedServiceName, setSelectedServiceName] = useState<string>("");
+  const [selectedServiceGroup, setSelectedServiceGroup] = useState<string>("");
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -71,6 +72,7 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
                   onClick={() => {
                     setSelectedCategories(service.categories);
                     setSelectedServiceName(he.decode(service.service_name));
+                    setSelectedServiceGroup(he.decode(service.service_group));
                   }}
                 >
                   View Prices
@@ -104,6 +106,7 @@ const ServiceTable: React.FC<ServiceTableProps> = ({
           categories={selectedCategories}
           onClose={() => setSelectedCategories(null)}
           serviceName={selectedServiceName}
+          serviceGroup={selectedServiceGroup}
         />
       )}
     </div>
