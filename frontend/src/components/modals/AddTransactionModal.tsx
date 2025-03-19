@@ -36,11 +36,13 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [patientName, setPatientName] = useState("");
   const [serviceGroup, setServiceGroup] = useState("");
   const [date, setDate] = useState("");
-  const [taxRate, setTaxRate] = useState(0.1);
+  // const [taxRate, setTaxRate] = useState(0.1);s
   const [username, setUsername] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const {
     details,
+    taxRate,
+    setTaxRate,
     setDetails,
     updateDetail,
     beforeTax,
@@ -105,6 +107,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     }
 
     calculateTotals();
+  };
+
+  const handleTaxRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = Number(e.target.value);
+    if (value < 0) value = 0;
+    if (value > 1) value = 1;
+
+    setTaxRate(value);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -196,13 +206,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             max={1}
             step={0.01}
             value={taxRate}
-            onChange={(e) => {
-              let value = Number(e.target.value);
-              if (value < 0) value = 0;
-              if (value > 1) value = 1;
-              setTaxRate(value);
-              calculateTotals();
-            }}
+            onChange={handleTaxRateChange}
             required
           />
 

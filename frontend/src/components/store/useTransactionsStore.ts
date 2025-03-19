@@ -12,7 +12,7 @@ interface TransactionState {
   beforeTax: number;
   taxValue: number;
   afterTax: number;
-  taxRate: number; // Tambahkan taxRate di store
+  taxRate: number; 
   setTaxRate: (rate: number) => void;
   setDetails: (details: Detail[]) => void;
   updateDetail: (index: number, field: keyof Detail, value: any) => void;
