@@ -9,11 +9,13 @@ import {
   AddTransactionType,
 } from "../components/types/transaction";
 import AddTransactionModal from "../components/modals/AddTransactionModal";
+import { useSnackbar } from "notistack";
 
 const TransactionPage: React.FC = () => {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchTransactions();
@@ -45,8 +47,10 @@ const TransactionPage: React.FC = () => {
             : new Date(transaction.date).toISOString().split("T")[0],
       });
       setTransactions([...transactions, newTransaction]);
+      enqueueSnackbar("Transaction added successfully", { variant: "success" });
       setIsModalOpen(false);
     } catch (error) {
+      enqueueSnackbar("Failed to add transaction", { variant: "error" });
       console.error("Error adding transaction:", error);
     }
   };
