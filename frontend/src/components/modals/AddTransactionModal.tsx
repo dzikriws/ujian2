@@ -36,7 +36,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [patientName, setPatientName] = useState("");
   const [serviceGroup, setServiceGroup] = useState("");
   const [date, setDate] = useState("");
-  const [taxRate, setTaxRate] = useState(0.15);
+  const [taxRate, setTaxRate] = useState(0.1);
   const [username, setUsername] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -93,6 +93,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
       if (selectedCategory) {
         updateDetail(index, "price", selectedCategory.price);
+      }
+
+      if (selectedService) {
+        updateDetail(index, "service_id", selectedService.service_id);
+      }
+
+      if (taxRate > 0) {
+        calculateTotals();
       }
     }
 
@@ -303,7 +311,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           </button>
           <div>
             <h2>Before Tax : {formattedRupiah(beforeTax)}</h2>
-            <h2>Tax Value :  {formattedRupiah(taxValue)}</h2>
+            <h2>Tax Rate : {taxRate * 100} %</h2>
+            <h2>Tax Value : {formattedRupiah(taxValue)}</h2>
             <h2>After Tax : {formattedRupiah(afterTax)}</h2>
           </div>
 
@@ -312,7 +321,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!doctorId || !patientName || !details.length}
+            >
               Add
             </button>
           </div>

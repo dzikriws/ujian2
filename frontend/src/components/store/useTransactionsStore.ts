@@ -24,14 +24,14 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
   beforeTax: 0,
   taxValue: 0,
   afterTax: 0,
-  taxRate: 0.15, // Default tax rate
+  taxRate: 0.15,
   setTaxRate: (rate) => {
     set({ taxRate: rate });
-    get().calculateTotals(); // Recalculate otomatis saat tax rate berubah
+    get().calculateTotals();
   },
   setDetails: (details) => {
     set({ details });
-    get().calculateTotals(); // Hitung ulang otomatis
+    get().calculateTotals();
   },
   updateDetail: (index, field, value) => {
     set((state) => {
@@ -40,7 +40,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
 
       return { details: updatedDetails };
     });
-    get().calculateTotals(); // Hitung ulang otomatis
+    get().calculateTotals();
   },
   calculateTotals: () => {
     set((state) => {
@@ -51,7 +51,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       const taxValue = beforeTax * state.taxRate;
       const afterTax = beforeTax + taxValue;
 
-      return { beforeTax, taxValue, afterTax };
+      return { beforeTax, taxValue, afterTax, taxRate: state.taxRate };
     });
   },
 }));

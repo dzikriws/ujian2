@@ -41,7 +41,11 @@ const AddServiceCategoryModal: React.FC<AddServiceCategoryModalProps> = ({
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!categoryName}
+            >
               Add
             </button>
           </div>

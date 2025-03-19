@@ -134,7 +134,11 @@ const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!doctorName || !address || !city || !country}
+            >
               Add
             </button>
           </div>
