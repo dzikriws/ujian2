@@ -86,9 +86,12 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     updateDetail(index, field, value);
 
     if (field === "category_id") {
-      const selectedService = services.find((s) =>
-        s.categories.some((c) => c.category_id === value)
+      // Ambil service_id dari detail yang sedang dipilih
+      const selectedService = services.find(
+        (s) => s.service_id === details[index].service_id
       );
+
+      // Cari kategori berdasarkan category_id dalam service yang benar
       const selectedCategory = selectedService?.categories.find(
         (c) => c.category_id === value
       );
@@ -96,14 +99,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       if (selectedCategory) {
         updateDetail(index, "price", selectedCategory.price);
       }
+    }
 
-      if (selectedService) {
-        updateDetail(index, "service_id", selectedService.service_id);
-      }
-
-      if (taxRate > 0) {
-        calculateTotals();
-      }
+    if (taxRate > 0) {
+      calculateTotals();
     }
 
     calculateTotals();
@@ -152,7 +151,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="w-full fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
         <h2 className="text-xl font-bold mb-4 text-white">Add Transaction</h2>
         <form onSubmit={handleSubmit}>
@@ -292,7 +291,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
                 {/* Price */}
                 <span className="text-white">
-                  {formattedRupiah(detail.price * detail.qty)}
+                  price: {formattedRupiah(detail.price)}
+                </span>
+                {/* Price */}
+                <span className="text-white">
+                  total: {formattedRupiah(detail.price * detail.qty)}
                 </span>
 
                 {/* Remove Button */}
@@ -306,6 +309,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               </div>
             );
           })}
+
+          {/* Adding Item Detail */}
           <button
             type="button"
             className="btn btn-secondary w-full"
@@ -313,11 +318,27 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           >
             + Add Service
           </button>
-          <div>
-            <h2>Before Tax : {formattedRupiah(beforeTax)}</h2>
-            <h2>Tax Rate : {taxRate * 100} %</h2>
-            <h2>Tax Value : {formattedRupiah(taxValue)}</h2>
-            <h2>After Tax : {formattedRupiah(afterTax)}</h2>
+
+          {/* Calculate Tax */}
+          <div className="mt-4 border-t pt-4">
+            <div className="flex justify-between">
+              <span className="font-bold">Before tax:</span>
+              <span>{formattedRupiah(beforeTax)}</span>
+            </div>
+            <div className="flex justify-between mt-2">
+              <span className="font-bold">Tax Rate:</span>
+              <span>{taxRate !== null && taxRate ? taxRate * 100 : 0}%</span>
+            </div>
+            <div className="flex justify-between mt-2">
+              <span className="font-bold">Tax Value:</span>
+              <span>{formattedRupiah(taxValue)}</span>
+            </div>
+            <div className="flex justify-between mt-2 border-t pt-2">
+              <span className="font-bold">After Tax:</span>
+              <span className="text-lg font-bold">
+                {formattedRupiah(afterTax)}
+              </span>
+            </div>
           </div>
 
           {/* Submit & Cancel Buttons */}

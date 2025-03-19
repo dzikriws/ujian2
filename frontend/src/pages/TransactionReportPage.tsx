@@ -68,14 +68,30 @@ const TransactionReportPage: React.FC = () => {
     setDoctors(formattedDoctors);
   };
 
+  // const fetchServices = async () => {
+  //   const data = await getServices();
+  //   const formattedServices = data.map((service: any) => ({
+  //     label: service.service_group,
+  //     value: service.service_group,
+  //   }));
+  //   setServices(formattedServices);
+  // };
+
   const fetchServices = async () => {
     const data = await getServices();
-    const formattedServices = data.map((service: any) => ({
-      label: service.service_group,
-      value: service.service_group,
+    
+    const uniqueServiceGroups: string[] = Array.from(
+      new Set(data.map((service: any) => service.service_group))
+    );
+  
+    const formattedServices = uniqueServiceGroups.map((serviceGroup) => ({
+      label: serviceGroup,
+      value: serviceGroup,
     }));
+  
     setServices(formattedServices);
   };
+  
 
   return (
     <div className="p-6">
@@ -109,6 +125,8 @@ const TransactionReportPage: React.FC = () => {
             onChange={setSelectedService}
           />
         </div>
+
+        {/* Date */}
         <div className="w-full">
           <InputField
             label="Start Date"
@@ -127,6 +145,8 @@ const TransactionReportPage: React.FC = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
+
+        {/* Grand Total */}
         <div className="w-full">
           <InputField
             label="Min Grand Total"
