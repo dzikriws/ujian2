@@ -17,3 +17,16 @@ export interface TransactionType {
     amount: number;
   }[];
 }
+
+export interface AddTransactionType {
+  doctor_id: number;
+  patient_name: string;
+  date: string;
+  tax_rate: number;
+  username: string;
+  details: {
+    service_id: number;
+    category_id: number;
+    qty: number;
+  }[];
+}

@@ -13,11 +13,6 @@ export const transactionValidator = [
     .withMessage("patient_name is required")
     .isString()
     .withMessage("patient_name must be a string"),
-  body("service_id")
-    .notEmpty()
-    .withMessage("service_id is required")
-    .isInt({ min: 1 })
-    .withMessage("service_id must be a positive integer"),
   body("date").optional().isDate().withMessage("date must be a valid date"),
   body("tax_rate")
     .optional()
@@ -33,6 +28,9 @@ export const transactionValidator = [
   body("details")
     .isArray({ min: 1 })
     .withMessage("details must be a non-empty array"),
+  body("details.*.service_id")
+    .isInt({ min: 1 })
+    .withMessage("service_id must be a positive integer"),
   body("details.*.category_id")
     .isInt({ min: 1 })
     .withMessage("category_id must be a positive integer"),

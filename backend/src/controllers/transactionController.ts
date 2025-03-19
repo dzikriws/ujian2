@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../config/pool";
+import { PoolClient } from "pg";
 
 /********************************
  *                              *
@@ -154,7 +155,6 @@ export const createTransaction = async (
     const {
       doctor_id,
       patient_name,
-      service_id,
       date = new Date(),
       tax_rate = 0,
       username,
@@ -163,64 +163,87 @@ export const createTransaction = async (
 
     await client.query("BEGIN");
 
-    // Finding service group
-    const findServiceGroupQuery = `
-        SELECT service_group FROM master_service WHERE service_id = $1
-      `;
+    // Finding service group (Using first service_id as reference)
+    const parsedServiceId = parseInt(details[0].service_id, 10);
+    if (isNaN(parsedServiceId)) {
+      throw new Error("Invalid service_id");
+    }
+
+    const findServiceGroupQuery = `SELECT service_group FROM master_service WHERE service_id = $1`;
     const findServiceGroupResult = await client.query(findServiceGroupQuery, [
-      service_id,
+      parsedServiceId,
     ]);
+
+    if (findServiceGroupResult.rowCount === 0) {
+      throw new Error("Service group not found");
+    }
 
     const serviceGroup = findServiceGroupResult.rows[0].service_group;
 
     // Inserting transaction
     const insertTransactionQuery = `
-        INSERT INTO transactions 
-          (service_group, doctor_id, patient_name, transaction_date, tax_rate, username) 
-        VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING *
-      `;
+      INSERT INTO transactions 
+        (service_group, doctor_id, patient_name, transaction_date, tax_rate, username) 
+      VALUES ($1, $2, $3, $4, $5, $6) 
+      RETURNING transaction_id
+    `;
     const insertTransactionResult = await client.query(insertTransactionQuery, [
       serviceGroup,
-      doctor_id,
+      parseInt(doctor_id, 10),
       patient_name,
-      date,
-      tax_rate,
+      new Date(date),
+      parseFloat(tax_rate),
       username,
     ]);
+
+    if (insertTransactionResult.rowCount === 0) {
+      throw new Error("Transaction creation failed");
+    }
 
     const transactionId = insertTransactionResult.rows[0].transaction_id;
 
     // Inserting transaction details
     for (const detail of details) {
+      const parsedServiceId = parseInt(detail.service_id, 10);
+      const parsedCategoryId = parseInt(detail.category_id, 10);
+      const parsedQty = parseInt(detail.qty, 10);
+
+      if (
+        isNaN(parsedServiceId) ||
+        isNaN(parsedCategoryId) ||
+        isNaN(parsedQty)
+      ) {
+        throw new Error("Invalid service_id, category_id, or qty");
+      }
+
       // Finding price
-      const findPriceQuery = `
-          SELECT price FROM pricelists WHERE service_id = $1 AND service_category_id = $2
-        `;
+      const findPriceQuery = `SELECT price FROM pricelists WHERE service_id = $1 AND service_category_id = $2`;
       const findPriceResult = await client.query(findPriceQuery, [
-        service_id,
-        parseInt(detail.category_id),
+        parsedServiceId,
+        parsedCategoryId,
       ]);
 
-      const price = findPriceResult.rows[0].price;
-      const amount = price * detail.qty;
+      if (findPriceResult.rowCount === 0) {
+        throw new Error(
+          `Price not found for service_id ${parsedServiceId} and category_id ${parsedCategoryId}`
+        );
+      }
 
-      // Parsing type
-      const parsedPrice = parseFloat((Number(price) || 0).toFixed(2));
-      const parsedAmount = parseFloat((Number(amount) || 0).toFixed(2));
+      const price = parseFloat(findPriceResult.rows[0].price);
+      const amount = price * parsedQty;
 
       const insertTransactionDetailQuery = `
-          INSERT INTO transaction_details 
-            (transaction_id, service_id, service_category, quantity, price, amount) 
-          VALUES ($1, $2, $3, $4, $5, $6)
-        `;
+        INSERT INTO transaction_details 
+          (transaction_id, service_id, service_category, quantity, price, amount) 
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `;
       await client.query(insertTransactionDetailQuery, [
         transactionId,
-        service_id,
-        detail.category_id,
-        detail.qty,
-        parsedPrice,
-        parsedAmount,
+        parsedServiceId,
+        parsedCategoryId,
+        parsedQty,
+        price,
+        amount,
       ]);
     }
 

@@ -4,6 +4,7 @@ import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import TransactionDetailModal from "../modals/TransactionDetailModal";
 import { formattedRupiah, formatDate } from "../helpers/format";
 import { TransactionType } from "../types/transaction";
+import he from "he";
 
 interface TransactionTableProps {
   transactions: TransactionType[];
@@ -51,8 +52,16 @@ const TransactionReportsTable: React.FC<TransactionTableProps> = ({
             displayedTransactions.map((transaction) => (
               <tr key={transaction.transaction_id}>
                 <td>{transaction.transaction_id}</td>
-                <td>{transaction.doctor_name || "-"}</td>
-                <td>{transaction.patient_name}</td>
+                <td>
+                  {transaction.doctor_name
+                    ? he.decode(transaction.doctor_name)
+                    : "-"}
+                </td>
+                <td>
+                  {transaction.patient_name
+                    ? he.decode(transaction.patient_name)
+                    : "-"}
+                </td>
                 <td>{transaction.service_group}</td>
                 <td>{formattedRupiah(Number(transaction.sub_total))}</td>
                 <td>

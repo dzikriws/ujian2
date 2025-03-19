@@ -1,8 +1,9 @@
 import { api } from "../utils/api";
 
-export const getTransactions = async () => {
+export const getTransactions = async (filters = {}) => {
   try {
-    const response = await api.get("/transactions");
+    const queryString = new URLSearchParams(filters).toString();
+    const response = await api.get(`/transactions?${queryString}`);
     return response.data.data;
   } catch (error) {
     console.error("Error fetching transactions:", error);
@@ -18,16 +19,16 @@ export const getTransaction = async (id: number) => {
     console.error("Error fetching transaction:", error);
     throw error;
   }
-}
+};
 
 export const createTransaction = async (transaction: {
   doctor_id: number;
-  patient_name: number;
-  service_id: number;
-  date: Date;
+  patient_name: string;
+  date: string;
   tax_rate: number | null;
   username: string;
   details: {
+    service_id: number;
     category_id: number;
     qty: number;
   }[];
