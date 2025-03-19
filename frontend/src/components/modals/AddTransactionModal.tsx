@@ -4,6 +4,7 @@ import { getDoctors } from "../../services/doctorService";
 import { getServices } from "../../services/serviceService";
 import { useSnackbar } from "notistack";
 import { useTransactionStore, Detail } from "../store/useTransactionsStore";
+import { formattedRupiah } from "../helpers/format";
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -95,7 +96,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       }
     }
 
-    calculateTotals(taxRate);
+    calculateTotals();
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -104,6 +105,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       !doctorId ||
       !patientName ||
       !date ||
+      !details.length ||
       details.some((d) => d.service_id === 0 || d.category_id === 0)
     ) {
       enqueueSnackbar("Please fill all required fields.", { variant: "error" });
@@ -124,7 +126,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     setPatientName("");
     setServiceGroup("");
     setDate("");
-    setTaxRate(0.15);
+    setTaxRate(0.1);
     setDetails([]);
     onClose();
   };
@@ -133,7 +135,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
         <h2 className="text-xl font-bold mb-4 text-white">Add Transaction</h2>
         <form onSubmit={handleSubmit}>
           {/* Doctor Name */}
@@ -176,6 +178,25 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               </option>
             ))}
           </select>
+
+          {/* Tax Rate */}
+          <InputField
+            label="Tax Rate"
+            name="tax_rate"
+            type="number"
+            min={0}
+            max={1}
+            step={0.01}
+            value={taxRate}
+            onChange={(e) => {
+              let value = Number(e.target.value);
+              if (value < 0) value = 0;
+              if (value > 1) value = 1;
+              setTaxRate(value);
+              calculateTotals();
+            }}
+            required
+          />
 
           {/* Transaction Date */}
           <InputField
@@ -250,14 +271,16 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                   min="1"
                   className="input input-bordered w-20"
                   value={detail.qty}
-                  onChange={(e) =>
-                    handleDetailChange(index, "qty", Number(e.target.value))
-                  }
+                  onChange={(e) => {
+                    let qty = Number(e.target.value);
+                    if (qty < 1) qty = 1;
+                    handleDetailChange(index, "qty", qty);
+                  }}
                 />
 
                 {/* Price */}
                 <span className="text-white">
-                  Rp {detail.price * detail.qty}
+                  {formattedRupiah(detail.price * detail.qty)}
                 </span>
 
                 {/* Remove Button */}
@@ -271,18 +294,18 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               </div>
             );
           })}
-          <div>
-            <h2>Before Tax : Rp {beforeTax}</h2>
-            <h2>Tax Value : Rp {taxValue}</h2>
-            <h2>After Tax : Rp {afterTax}</h2>
-          </div>
           <button
             type="button"
-            className="btn btn-success w-full"
+            className="btn btn-secondary w-full"
             onClick={handleAddDetail}
           >
-            + Add Category
+            + Add Service
           </button>
+          <div>
+            <h2>Before Tax : {formattedRupiah(beforeTax)}</h2>
+            <h2>Tax Value :  {formattedRupiah(taxValue)}</h2>
+            <h2>After Tax : {formattedRupiah(afterTax)}</h2>
+          </div>
 
           {/* Submit & Cancel Buttons */}
           <div className="flex justify-end gap-2 mt-4">

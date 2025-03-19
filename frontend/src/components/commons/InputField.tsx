@@ -4,6 +4,9 @@ interface InputFieldProps {
   label: string;
   name: string;
   type?: string;
+  min?: number;
+  max?: number;
+  step?: number;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
@@ -16,6 +19,9 @@ const InputField: React.FC<InputFieldProps> = ({
   value,
   onChange,
   required = false,
+  min,
+  max,
+  step,
 }) => {
   return (
     <div className="mb-2">
@@ -29,6 +35,9 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
+          min={min}
+          max={max}
+          step={step}
         />
       </label>
     </div>

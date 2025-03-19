@@ -22,7 +22,7 @@ const CategoryPriceModal: React.FC<CategoryPriceModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
         <h3 className="text-lg font-semibold mb-2">{serviceName}</h3>
         <h3 className="text-lg font-semibold mb-2">{serviceGroup}</h3>
         <ul className="space-y-2">

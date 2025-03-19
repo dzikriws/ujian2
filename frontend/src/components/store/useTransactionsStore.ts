@@ -12,33 +12,46 @@ interface TransactionState {
   beforeTax: number;
   taxValue: number;
   afterTax: number;
+  taxRate: number; // Tambahkan taxRate di store
+  setTaxRate: (rate: number) => void;
   setDetails: (details: Detail[]) => void;
   updateDetail: (index: number, field: keyof Detail, value: any) => void;
-  calculateTotals: (taxRate: number) => void;
+  calculateTotals: () => void;
 }
 
-export const useTransactionStore = create<TransactionState>((set) => ({
+export const useTransactionStore = create<TransactionState>((set, get) => ({
   details: [],
   beforeTax: 0,
   taxValue: 0,
   afterTax: 0,
-  setDetails: (details) => set({ details }),
-  updateDetail: (index, field, value) =>
+  taxRate: 0.15, // Default tax rate
+  setTaxRate: (rate) => {
+    set({ taxRate: rate });
+    get().calculateTotals(); // Recalculate otomatis saat tax rate berubah
+  },
+  setDetails: (details) => {
+    set({ details });
+    get().calculateTotals(); // Hitung ulang otomatis
+  },
+  updateDetail: (index, field, value) => {
     set((state) => {
       const updatedDetails = [...state.details];
       updatedDetails[index] = { ...updatedDetails[index], [field]: value };
 
       return { details: updatedDetails };
-    }),
-  calculateTotals: (taxRate) =>
+    });
+    get().calculateTotals(); // Hitung ulang otomatis
+  },
+  calculateTotals: () => {
     set((state) => {
       const beforeTax = state.details.reduce(
         (acc, detail) => acc + detail.price * detail.qty,
         0
       );
-      const taxValue = beforeTax * taxRate;
+      const taxValue = beforeTax * state.taxRate;
       const afterTax = beforeTax + taxValue;
 
       return { beforeTax, taxValue, afterTax };
-    }),
+    });
+  },
 }));

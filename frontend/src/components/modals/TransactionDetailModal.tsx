@@ -39,7 +39,7 @@ const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-2xl w-full">
+      <div className="bg-base-200 p-6 rounded shadow-lg max-w-2xl w-full max-h-screen overflow-y-auto">
         <h3 className="text-lg font-semibold mb-2">
           Transaction Number: {transactionId}
         </h3>
