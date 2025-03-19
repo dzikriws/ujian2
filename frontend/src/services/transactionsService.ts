@@ -1,10 +1,24 @@
 import { api } from "../utils/api";
 
 export const getTransactions = async () => {
-  const response = await api.get("/transactions");
-  console.log(response.data.data);
-  return response.data.data;
+  try {
+    const response = await api.get("/transactions");
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    return [];
+  }
 };
+
+export const getTransaction = async (id: number) => {
+  try {
+    const response = await api.get(`/transactions/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching transaction:", error);
+    throw error;
+  }
+}
 
 export const createTransaction = async (transaction: {
   doctor_id: number;
@@ -18,6 +32,11 @@ export const createTransaction = async (transaction: {
     qty: number;
   }[];
 }) => {
-  const response = await api.post("/transactions", transaction);
-  return response.data;
+  try {
+    const response = await api.post("/transactions", transaction);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating transaction:", error);
+    throw error;
+  }
 };

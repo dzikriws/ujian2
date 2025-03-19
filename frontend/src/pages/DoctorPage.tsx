@@ -12,24 +12,16 @@ import SearchBar from "../components/commons/SearchBar";
 import { useSnackbar } from "notistack";
 import { categoryOptions, countryOptions } from "../option/doctor";
 import FilterDropdown from "../components/commons/FilterDropdown";
+import { DoctorType } from "../components/types/doctor";
 
-interface Doctor {
-  doctor_id: number;
-  doctor_name: string;
-  address: string;
-  city: string;
-  country: string;
-  kategori: string;
-  contact_phone: string;
-}
 
 const DoctorPage: React.FC = () => {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<DoctorType[]>([]);
+  const [filteredDoctors, setFilteredDoctors] = useState<DoctorType[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorType | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
@@ -70,7 +62,7 @@ const DoctorPage: React.FC = () => {
     setFilteredDoctors(filtered);
   };
 
-  const handleAddDoctor = async (newDoctor: Omit<Doctor, "doctor_id">) => {
+  const handleAddDoctor = async (newDoctor: Omit<DoctorType, "doctor_id">) => {
     try {
       const response = await addDoctor(newDoctor);
       fetchDoctors();
@@ -82,14 +74,14 @@ const DoctorPage: React.FC = () => {
     }
   };
 
-  const handleEditDoctor = (doctor: Doctor) => {
+  const handleEditDoctor = (doctor: DoctorType) => {
     setSelectedDoctor(doctor);
     setUpdateModalOpen(true);
   };
 
   const handleUpdateDoctor = async (
     id: number,
-    updatedDoctor: Omit<Doctor, "doctor_id">
+    updatedDoctor: Omit<DoctorType, "doctor_id">
   ) => {
     try {
       const response = await updateDoctor(id, updatedDoctor);

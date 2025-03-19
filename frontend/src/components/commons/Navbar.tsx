@@ -40,7 +40,22 @@ const Navbar: React.FC = () => {
               <a href="/services">Services</a>
             </li>
             <li>
-              <a href="/transactions">Transactions</a>
+              <div className="dropdown dropdown-hover">
+                <div>
+                  Transactions
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm"
+                >
+                  <li>
+                    <a href="/transactions">Manage Transactions</a>
+                  </li>
+                  <li>
+                    <a href="/transactions-reports">Reports</a>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -49,7 +64,7 @@ const Navbar: React.FC = () => {
         <a className="text-xl">Clinic Service Management</a>
       </div>
       <div className="navbar-end">
-            <LogoutButton />
+        <LogoutButton />
       </div>
     </div>
   );

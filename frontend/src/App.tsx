@@ -8,6 +8,7 @@ import ServiceCategoryPage from "./pages/ServiceCategoryPage";
 import DoctorPage from "./pages/DoctorPage";
 import ServicePage from "./pages/ServicePage";
 import TransactionPage from "./pages/TransactionPage";
+import TransactionReportPage from "./pages/TransactionReportPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="doctors" element={<DoctorPage />} />
             <Route path="services" element={<ServicePage />}/>
             <Route path="transactions" element={<TransactionPage />}/>
+            <Route path="transactions-reports" element={<TransactionReportPage />}/>
           </Route>
         </Route>
 

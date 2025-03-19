@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import Pagination from "../commons/Pagination";
 import ItemsPerPageSelector from "../commons/ItemsPerPageSelector";
 import TransactionDetailModal from "../modals/TransactionDetailModal";
-import { formattedRupiah } from "../helpers/format";
+import { formattedRupiah, formatDate } from "../helpers/format";
 import { TransactionType } from "../types/transaction";
 
 interface TransactionTableProps {
   transactions: TransactionType[];
 }
 
-const TransactionTable: React.FC<TransactionTableProps> = ({
+const TransactionReportsTable: React.FC<TransactionTableProps> = ({
   transactions,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,9 +35,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
         <thead>
           <tr>
             <th>Transaction ID</th>
+            <th>Doctor Name</th>
             <th>Patient Name</th>
             <th>Service Group</th>
-            <th>Total</th>
+            <th>Before Tax</th>
+            <th>Tax Rate</th>
+            <th>Tax Value</th>
+            <th>After Tax</th>
+            <th>Date</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -46,9 +51,24 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
             displayedTransactions.map((transaction) => (
               <tr key={transaction.transaction_id}>
                 <td>{transaction.transaction_id}</td>
+                <td>{transaction.doctor_name || "-"}</td>
                 <td>{transaction.patient_name}</td>
                 <td>{transaction.service_group}</td>
+                <td>{formattedRupiah(Number(transaction.sub_total))}</td>
+                <td>
+                  {transaction.tax_rate
+                    ? `${transaction.tax_rate * 100}%`
+                    : "-"}
+                </td>
+                <td>
+                  {transaction.tax_rate && transaction.sub_total
+                    ? formattedRupiah(
+                        Number(transaction.sub_total) * transaction.tax_rate
+                      )
+                    : "-"}
+                </td>
                 <td>{formattedRupiah(Number(transaction.grand_total))}</td>
+                <td>{formatDate(transaction.transaction_date)}</td>
                 <td>
                   <button
                     className="btn btn-info btn-sm"
@@ -95,4 +115,4 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   );
 };
 
-export default TransactionTable;
+export default TransactionReportsTable;

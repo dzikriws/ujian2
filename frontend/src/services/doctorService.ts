@@ -1,8 +1,13 @@
 import { api } from "../utils/api";
 
 export const getDoctors = async () => {
-  const response = await api.get("/doctor");
-  return response.data.data;
+  try {
+    const response = await api.get("/doctor");
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching doctors:", error);
+    return [];
+  }
 };
 
 export const addDoctor = async (doctor: {
@@ -13,8 +18,13 @@ export const addDoctor = async (doctor: {
   kategori: string;
   contact_phone: string;
 }) => {
-  const response = await api.post("/doctor", doctor);
-  return response.data;
+  try {
+    const response = await api.post("/doctor", doctor);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding doctor:", error);
+    throw error;
+  }
 };
 
 export const updateDoctor = async (
@@ -28,11 +38,21 @@ export const updateDoctor = async (
     contact_phone: string;
   }
 ) => {
-  const response = await api.put(`/doctor/${id}`, doctor);
-  return response.data;
+  try {
+    const response = await api.put(`/doctor/${id}`, doctor);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating doctor:", error);
+    throw error;
+  }
 };
 
 export const deleteDoctor = async (id: number) => {
-  const response = await api.delete(`/doctor/${id}`);
-  return response.data;
+  try {
+    const response = await api.delete(`/doctor/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting doctor:", error);
+    throw error;
+  }
 };
