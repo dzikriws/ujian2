@@ -26,6 +26,8 @@ app.use("/transactions", transactionRoutes);
 
 app.listen(PORT, () => {
   console.log(
-    `Server running on PORT:${PORT} in ${process.env.DB_NAME} db as ${process.env.DB_USER} user`
+    `Server running on PORT:${PORT || 3000} in ${
+      process.env.DB_NAME || "ujian2"
+    } db as ${process.env.DB_USER || "postgres"} user`
   );
 });

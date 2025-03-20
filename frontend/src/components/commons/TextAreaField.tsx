@@ -17,10 +17,11 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
 }) => {
   return (
     <div className="mb-2">
-      <label className="block font-semibold text-white">{label}</label>
+      <label className=" font-semibold text-white floating-label">{label}</label>
       <textarea
         name={name}
-        className="textarea textarea-bordered w-full"
+        className="textarea textarea-bordered w-full input input-bordered"
+        placeholder=""
         value={value}
         onChange={onChange}
         required={required}

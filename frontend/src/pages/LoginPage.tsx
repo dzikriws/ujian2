@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/commons/InputField";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const LoginPage: React.FC = () => {
                 } mx-1`}
                 onClick={() => setUseEmail(true)}
               >
-                Login dengan Email
+                Login with Email
               </button>
               <button
                 className={`btn ${
@@ -63,21 +64,16 @@ const LoginPage: React.FC = () => {
                 } mx-1`}
                 onClick={() => setUseEmail(false)}
               >
-                Login dengan Username
+                Login with Username
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="fieldset-label">
-                  {useEmail ? "Email" : "Username"}
-                </label>
-                <input
+                <InputField
+                  label={useEmail ? "Email" : "Username"}
+                  name={useEmail ? "email" : "username"}
                   type={useEmail ? "email" : "text"}
-                  className="input w-full"
-                  placeholder={
-                    useEmail ? "Email" : "Username"
-                  }
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   required
@@ -85,11 +81,10 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="fieldset-label">Password</label>
-                <input
+                <InputField
+                  label="Password"
+                  name="password"
                   type="password"
-                  className="input w-full"
-                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

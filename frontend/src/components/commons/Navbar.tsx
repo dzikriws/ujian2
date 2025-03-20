@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
                   className="dropdown-content menu bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm"
                 >
                   <li>
-                    <a href="/transactions">Manage Transactions</a>
+                    <a href="/transactions">Manage</a>
                   </li>
                   <li>
                     <a href="/transactions-reports">Reports</a>

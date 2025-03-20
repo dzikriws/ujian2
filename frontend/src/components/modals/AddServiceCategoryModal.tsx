@@ -24,8 +24,8 @@ const AddServiceCategoryModal: React.FC<AddServiceCategoryModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
+    <div className="w-full fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-base-200 p-8 rounded-lg shadow-lg w-3/4 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4 text-white">Add Category</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-2">

@@ -86,12 +86,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     updateDetail(index, field, value);
 
     if (field === "category_id") {
-      // Ambil service_id dari detail yang sedang dipilih
       const selectedService = services.find(
         (s) => s.service_id === details[index].service_id
       );
 
-      // Cari kategori berdasarkan category_id dalam service yang benar
       const selectedCategory = selectedService?.categories.find(
         (c) => c.category_id === value
       );
@@ -111,9 +109,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const handleTaxRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(e.target.value);
     if (value < 0) value = 0;
-    if (value > 1) value = 1;
+    if (value > 100) value = 100;
 
-    setTaxRate(value);
+    setTaxRate(value /100);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -152,7 +150,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
   return (
     <div className="w-full fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
+      <div className="bg-base-200 p-8 rounded-lg shadow-lg w-3/4 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4 text-white">Add Transaction</h2>
         <form onSubmit={handleSubmit}>
           {/* Doctor Name */}
@@ -198,13 +196,13 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
           {/* Tax Rate */}
           <InputField
-            label="Tax Rate"
+            label="Tax Rate (%)"
             name="tax_rate"
             type="number"
             min={0}
-            max={1}
-            step={0.01}
-            value={taxRate}
+            max={100}
+            step={1}
+            value={taxRate * 100}
             onChange={handleTaxRateChange}
             required
           />

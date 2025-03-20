@@ -1,5 +1,6 @@
 import React from "react";
 import he from "he";
+import {formattedRupiah} from "../helpers/format";
 
 interface Category {
   category_id: number;
@@ -22,7 +23,7 @@ const CategoryPriceModal: React.FC<CategoryPriceModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-base-200 p-6 rounded shadow-lg max-w-xl w-full max-h-screen overflow-y-auto">
+      <div className="bg-base-200 p-8 rounded-lg shadow-lg w-3/4 overflow-y-auto">
         <h3 className="text-lg font-semibold mb-2">{serviceName}</h3>
         <h3 className="text-lg font-semibold mb-2">{serviceGroup}</h3>
         <ul className="space-y-2">
@@ -33,7 +34,7 @@ const CategoryPriceModal: React.FC<CategoryPriceModalProps> = ({
             >
               <span>{he.decode(category.category_name)}</span>
               <span className="font-bold">
-                Rp. {category.price.toLocaleString()}
+                {formattedRupiah(category.price)}
               </span>
             </li>
           ))}
