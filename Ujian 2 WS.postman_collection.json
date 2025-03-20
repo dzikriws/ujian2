@@ -1,0 +1,465 @@
+{
+	"info": {
+		"_postman_id": "c02231ce-080e-49ef-bb5c-ef46c63327fd",
+		"name": "Ujian 2 WS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42220634",
+		"_collection_link": "https://huhuhaha-6097.postman.co/workspace/Team-Workspace~9e6dedf7-a61d-4ad7-8b5a-569f3bfecc73/collection/42220634-c02231ce-080e-49ef-bb5c-ef46c63327fd?action=share&source=collection_link&creator=42220634"
+	},
+	"item": [
+		{
+			"name": "Master User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"dzikri@agmail.com\",\r\n    \"password\" : \"dzikri\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"login"
+							]
+						},
+						"description": "### Login Request\n\nThis endpoint is used to authenticate a user by providing their email and password.\n\n#### Request Body\n\n- `email` (string) - The email of the user.\n    \n- `password` (string) - The password of the user.\n    \n\n#### Example\n\n``` json\n{\n    \"email\": \"dzikri@agmail.com\",\n    \"password\": \"dzikri\"\n}\n\n ```\n\n### Login Response\n\nThe response of this request can be represented using the following JSON schema:\n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"data\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"username\": {\n                    \"type\": \"string\"\n                },\n                \"email\": {\n                    \"type\": \"string\"\n                }\n            }\n        }\n    }\n}\n\n ```\n\nThe response schema includes the following properties:\n\n- `message` (string) - A message indicating the status of the login attempt.\n    \n- `data` (object) - An object containing user information.\n    \n    - `username` (string) - The username of the authenticated user.\n        \n    - `email` (string) - The email of the authenticated user.\n        \n\n#### Example\n\n``` json\n{\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"username\": \"dzikri\",\n        \"email\": \"dzikri@gmail.com\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"dzikri\",\r\n    \"email\" : \"dzikri@gmail.com\",\r\n    \"password\" : \"dzikri\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Service Category",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/service_category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service_category"
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve the service categories available. The response will be in JSON format and will include an array of service categories, where each category contains a category ID and category name.\n\n### Request Body\n\nThis request does not require a request body.\n\n### Response Body\n\nThe response will be in JSON format with the following structure:\n\n- `message` (string): A message related to the response.\n    \n- `data` (array): An array of service categories.\n    \n    - `category_id` (integer): The unique identifier for the category.\n        \n    - `category_name` (string): The name of the service category.\n        \n\nExample Response Body:\n\n``` json\n{\n    \"message\": \"\",\n    \"data\": [\n        {\n            \"category_id\": 0,\n            \"category_name\": \"\"\n        }\n    ]\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category_name\" : \"auh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/service_category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service_category"
+							]
+						},
+						"description": "### Add Service Category\n\nThis endpoint allows you to add a new service category.\n\n#### Request Body\n\n- `category_name` (string, required): The name of the service category.\n    \n\nExample:\n\n``` json\n{\n    \"category_name\": \"auh\"\n}\n\n ```\n\n#### Response\n\n- Status: 400\n    \n- Content-Type: application/json\n    \n\nThe response will include an error message and details about the validation errors, if any."
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category_name\" : \"update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/service_category/11902",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service_category",
+								"11902"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/service_category/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service_category",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Master Doctor",
+			"item": [
+				{
+					"name": "Get All doctor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/doctor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							]
+						},
+						"description": "Success Response\n\n``` json\n[\n    {\n        \"doctor_id\": 1,\n        \"doctor_name_name\": \"Dr Mahendra\",\n        \"address\": \"123 Main St, Jakarta\",\n        \"city\": \"Jakarta\",\n        \"country\": \"Indonesia\",\n        \"kategori\": \"Umum\",\n        \"contact_phone\": \"+62 812-3456-7890\"\n    },\n    {\n        \"doctor_id\": 2,\n        \"doctor_name_name\": \"Dr Agung\",\n        \"address\": \"45 Orchard Rd, Singapore\",\n        \"city\": \"Singapore\",\n        \"country\": \"Singapore\",\n        \"kategori\": \"Umum\",\n        \"contact_phone\": \"+65 9876-5432\"\n    }, ...\n]\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Doctor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"doctor_name\": \"dzikri\",\r\n    \"address\": \"jl\",\r\n    \"city\": \"kota\",\r\n    \"country\": \"Indonesia\",\r\n    \"kategori\": \"Umum\",\r\n    \"contact_phone\": \"+62 85691919544\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/doctor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor"
+							]
+						},
+						"description": "Success Response\n\n``` json\nRequest body\n{\n    \"doctor_name\" : \"dzikri\",\n    \"address\" : \"jl\",\n      \"city\" : \"kota\",\n      \"country\" : \"Indonesia\",\n      \"kategori\" : \"Umum\",\n      \"contact_phone\" : \"+62 85691919544\"\n}\nResponse\n{\n    \"message\": \"Doctor created successfully\",\n    \"data\": {\n        \"doctor_id\": 8,\n        \"doctor_name_name\": \"dzikri\",\n        \"address\": \"jl\",\n        \"city\": \"kota\",\n        \"country\": \"Indonesia\",\n        \"kategori\": \"Umum\",\n        \"contact_phone\": \"+62 85691919544\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"doctor_name\": \"dzikri update\",\r\n    \"address\": \"jl update\",\r\n    \"city\": \"kota update\",\r\n    \"country\": \"malaysia\",\r\n    \"kategori\": \"Umum\",\r\n    \"contact_phone\": \"+62 85691919544\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/doctor/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor",
+								"15"
+							]
+						},
+						"description": "Success Response\n\n``` json\nRequest{\n    \"doctor_name\": \"dzikri update\",\n    \"address\": \"jl update\",\n    \"city\": \"kota update\",\n    \"country\": \"malaysia\",\n    \"kategori\": \"Umum\",\n    \"contact_phone\": \"+62 85691919544\"\n}\nResponse\n{\n    \"message\": \"Doctor updated successfully\",\n    \"data\": {\n        \"doctor_id\": 6,\n        \"doctor_name_name\": \"dzikri update\",\n        \"address\": \"jl update\",\n        \"city\": \"kota update\",\n        \"country\": \"malaysia\",\n        \"kategori\": \"Umum\",\n        \"contact_phone\": \"+62 85691919544\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/doctor/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"doctor",
+								"15"
+							]
+						},
+						"description": "Success Response\n\n```\n{\n    \"message\": \"Doctor dzikri deleted successfully\"\n}\n ```\n\nNot Found\n\n``` json\n{\n    \"message\": \"Doctor not found\"\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Master Service",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"service_name\": \"Periksa sakit hati\",\r\n  \"service_group\": \"bucin\",\r\n  \"categories\": [\r\n    {\r\n      \"category_id\": 1,\r\n      \"price\": 1000\r\n    },\r\n    {\r\n      \"category_id\": 2,\r\n      \"price\": 1500\r\n    },\r\n    {\r\n      \"category_id\": 3,\r\n      \"price\": 3000\r\n    },\r\n    {\r\n      \"category_id\": 4,\r\n      \"price\": 5000\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"service_name\": \"Periksa sakit hati\",\r\n  \"service_group\": \"bucin\",\r\n  \"categories\": [\r\n    {\r\n      \"category_id\": 1,\r\n      \"price\": 1000\r\n    },\r\n    {\r\n      \"category_id\": 2,\r\n      \"price\": 1500\r\n    },\r\n    {\r\n      \"category_id\": 3,\r\n      \"price\": 3000\r\n    },\r\n    {\r\n      \"category_id\": 4,\r\n      \"price\": 6000\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/services/asad",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"services",
+								"asad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/services/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"services",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/transactions/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transactions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/transactions/22",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transactions",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"doctor_id\": 11,\r\n  \"patient_name\": \"aw\",\r\n  \"date\": \"2002-12-12\",\r\n  \"tax_rate\": 0.15,\r\n  \"username\": \"dzikri\",\r\n  \"details\": [\r\n    {\r\n      \"service_id\": 1,\r\n      \"category_id\": 1,\r\n      \"qty\": 1,\r\n      \"price\": 75000\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
